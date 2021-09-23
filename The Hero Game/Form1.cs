@@ -49,13 +49,13 @@ namespace The_Hero_Game
         
     }
     public abstract class Character : Tile //Question 2.2
-    {
+    { 
         protected int Hp;
         protected int max_Hp;
         protected int Damage; 
         char Tile_Border = 'X';
         string[] characterVision = new string[] { "north", "south", "west", "East" };
-        
+       
         public Character()
         {
 
@@ -97,6 +97,7 @@ namespace The_Hero_Game
         {
             return 0;
         }
+        public abstract Movement returnMove(Movement move);
         public void move()
         {
 
@@ -121,7 +122,7 @@ namespace The_Hero_Game
         }
         public class Goblin : Enemy
         {
-
+            char goblin = 'G';
             public Goblin()
             {
 
@@ -133,17 +134,35 @@ namespace The_Hero_Game
                 this.max_Hp = 10;
                 this.Damage = 1;
             }
+            public override Movement returnMove(Movement move)
+            {
+                r.Next(1, 5);
+                return move;
+            }
         }
         public class Hero : Character
         {
-   
-            public Hero(int x, int y, int hp) 
+            char hero = 'H';
+            public Hero(int x, int y, int hp, int max_hp) 
             {
-               
+                this.X = x;
+                this.Y = y;
                 this.Hp = hp;
-
+                this.max_Hp = max_hp;
+                this.Damage = 2;
+                
+            }
+            public override Movement returnMove(Movement move)
+            {
+              
+                return move;
+            }
+            public override string ToString()
+            {
+                return ("Player stats:" + "\n" + "Hp:" + Hp+ max_Hp + "\n" + "Damage:" + Damage + "\n" + "[" + X + ","+ Y + "]");
             }
         }
+        public 
         public partial class Form1 : Form
     {
         public Form1()
