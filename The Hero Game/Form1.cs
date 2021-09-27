@@ -183,20 +183,23 @@ namespace The_Hero_Game
             public class Map
             {
                 private Tile[,] map = new Tile[0,0];
-                private string hero;
-                private int[] enemies;
+                private Hero hero;
+                private Enemy[] enemies;
                 private  int mapHeight;
                 private  int mapWidth;
                 Random obj = new Random();
 
+                public Map()
+                {
 
-                public Map(int min_height, int max_height, int min_width, int max_width, int[] numEnemies)
+                }
+                public Map(int min_height, int max_height, int min_width, int max_width, int numenemies  )
                 {
                     mapHeight = randomize(min_height, max_height);                   
                     mapWidth = randomize(min_width, max_width);
                     map = new Tile[mapWidth, mapHeight];
-                    enemies = numEnemies;
                     
+                    Create();
                 }
                 public int randomize(int min, int max)
                 {
@@ -205,21 +208,33 @@ namespace The_Hero_Game
                     return heightmin;
 
                 }
-                public void make_Map()
+                public override string ToString()
                 {
                     string map = " ";
                     for (int row = 0; row< mapWidth; row++)
                     {
                         for (int column = 0; column< mapHeight; column++)
                         {
-                           
+                            map[row, column] = " ";
                         }
                     }
+                    for (int r = 0; r < mapWidth; r++)
+                    {
+                        map[r, 0] = "X";
+                        map[r, mapHeight - 1] = "X";
+                    }
+                    for (int r = 0; r < mapHeight; r++)
+                    {
+                        map[0, r] = "X";
+                        map[mapWidth - 1, r] = "X";
+                    }
+                    return map;
                 }
                 public void Create()
                 {
                     Hero hero = new Hero();
                     hero = (Hero)Create(Tile.Tiletype.Hero);
+                    
                     
                 }
                 public void updateVision()
