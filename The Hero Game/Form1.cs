@@ -113,9 +113,13 @@ namespace The_Hero_Game
                 {
 
                 }
-                public Enemy(int x, int y, int damage, int hp, int max_Hp)
+                public Enemy(int x, int y, int damage, int hp, int max_hp)
                 {
-
+                    this.X = x;
+                    this.Y = y;
+                    this.Damage = damage;
+                    this.Hp = hp;
+                    this.max_Hp = max_hp;
                 }
                 public override string ToString()
                 {
@@ -135,7 +139,7 @@ namespace The_Hero_Game
                     this.Y = y;
                     this.max_Hp = 10;
                     this.Damage = 1;
-                    char goblin = 'G';
+                    
                 }
                 public override Movement returnMove(Movement move)
                 {
@@ -146,6 +150,17 @@ namespace The_Hero_Game
             public class Hero : Character
             {
                 
+                public Hero()
+                {
+
+                }
+
+                public Hero(int x, int y)
+                {
+                    X = x;
+                    Y = y;
+                }
+
                 public Hero(int x, int y, int hp, int max_hp)
                 {
                     this.X = x;
@@ -153,7 +168,7 @@ namespace The_Hero_Game
                     this.Hp = hp;
                     this.max_Hp = max_hp;
                     this.Damage = 2;
-                    char hero = 'H';
+                    
                 }
                 public override Movement returnMove(Movement move)
                 {
@@ -167,17 +182,19 @@ namespace The_Hero_Game
             }
             public class Map
             {
-                private int[,] map = new int[0,0];
+                private Tile[,] map = new Tile[0,0];
                 private string hero;
                 private int[] enemies;
                 private  int mapHeight;
                 private  int mapWidth;
                 Random obj = new Random();
 
+
                 public Map(int min_height, int max_height, int min_width, int max_width, int[] numEnemies)
                 {
                     mapHeight = randomize(min_height, max_height);                   
                     mapWidth = randomize(min_width, max_width);
+                    map = new Tile[mapWidth, mapHeight];
                     enemies = numEnemies;
                     
                 }
@@ -188,18 +205,51 @@ namespace The_Hero_Game
                     return heightmin;
 
                 }
+                public void make_Map()
+                {
+                    string map = " ";
+                    for (int row = 0; row< mapWidth; row++)
+                    {
+                        for (int column = 0; column< mapHeight; column++)
+                        {
+                           
+                        }
+                    }
+                }
                 public void Create()
                 {
-
+                    Hero hero = new Hero();
+                    hero = (Hero)Create(Tile.Tiletype.Hero);
+                    
                 }
                 public void updateVision()
                 {
 
                 }
+                private Tile Create(Tiletype type)
+                {
+                    int x = obj.Next(mapWidth);
+                    int y = obj.Next(mapHeight);
+                    if (map[x, y] == null)
+                    {
+                        switch (type)
+                        {
+                            case Tile.Tiletype.Hero: return new Hero(x, y);
+                                break;
+                            case Tile.Tiletype.Enemy: return new Enemy(x, y);
+                                break;
+                        }                                                           
+                    }
+                }
+                
                
             }
-            public class GameEngine
+             public class GameEngine
             {
+                public char hero = 'H';
+                public char goblin = 'G';
+                public char boundries = 'X';
+                public char ground = ',';
                 private int map { get; }
 
                 public GameEngine()
@@ -208,16 +258,23 @@ namespace The_Hero_Game
                 }
                 public bool MovePlayer(Movement direction )
                 {
-                    return false;
+                    return true;
                 }
             }
+            
         }
         public Form1()
         {
             InitializeComponent();
-
+            //GameEngine gamemap = new GameEngine(10,20,10,20,7);
+            
         }
         private void button1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
         {
 
         }
