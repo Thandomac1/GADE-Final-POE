@@ -583,13 +583,19 @@ namespace The_Hero_Game
                         EnemyX = obj.Next(0, mapWidth);
                         EnemyY = obj.Next(0, mapHeight);
                     }
-
-                    Goblin NewEnemy = new Goblin(EnemyX, EnemyY);
-                    Gmap[EnemyX, EnemyY] = NewEnemy;
-                    Enemies.Add(NewEnemy);
-                    
-                    //Mage New_enemy = new Mage(EnemyX, EnemyY, typeofTile, "M", 5,5,5); //   Task 2 Q.3.1
-                    //Enemies.Add(New_enemy);
+                    int randomEnemies = obj.Next(2);
+                    if (randomEnemies == 1)
+                    {
+                        Goblin NewEnemy = new Goblin(EnemyX, EnemyY);
+                        Gmap[EnemyX, EnemyY] = NewEnemy;
+                        Enemies.Add(NewEnemy);
+                    }
+                    else
+                    {
+                        Mage New_enemy = new Mage(EnemyX, EnemyY); //   Task 2 Q.3.1
+                        Gmap[EnemyX, EnemyY] = New_enemy;
+                        Enemies.Add(New_enemy);
+                    }
                     break;
                 case Character.Tiletype.Gold:
                     Gold newGold = new Gold(X, Y);
