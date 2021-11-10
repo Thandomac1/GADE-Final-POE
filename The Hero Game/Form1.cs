@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
 
 namespace The_Hero_Game
 {
@@ -631,6 +633,7 @@ namespace The_Hero_Game
             return null;
         }
     }
+    [Serializable]
     public class GameEngine
     {
         public Label MapLabel = new Label();
@@ -689,7 +692,26 @@ namespace The_Hero_Game
 
             return false;
         }
+        public class SaveandLoad
+        {
+            public string filename = "data.thandomac";
+            private SaveandLoad SandL;
+            private BinaryFormatter Bformatter;
+        public void Save()
+            {
+
+            }
+            public void Load()
+            {
+
+            }
+        }
+       
+        
+        
+
     }
+
     public partial class Form1 : Form
     {
         public Form1()
