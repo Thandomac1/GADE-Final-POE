@@ -722,6 +722,7 @@ namespace The_Hero_Game
 
     public partial class Form1 : Form
     {
+        GameEngine gameengine = new GameEngine();
         public Form1()
         {
 
@@ -734,12 +735,41 @@ namespace The_Hero_Game
         }
         private void button1_Click(object sender, EventArgs e)
         {
+            mapLabel.Text = "Hello";
+            gameengine.MovePlayer(Character.Movement.Down);
+            gameengine.Showmap();
+            
 
         }
 
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
 
+        }
+        
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            gameengine.MovePlayer(Character.Movement.Left);
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            gameengine.MovePlayer(Character.Movement.up);
+            
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            gameengine.MovePlayer(Character.Movement.Right);
+        }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            
+            gameengine.MovePlayer(Character.Movement.Down);
+            gameengine.Showmap();
+            mapLabel.Text = gameengine.MAP.ToString();
         }
 
 
