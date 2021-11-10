@@ -699,11 +699,19 @@ namespace The_Hero_Game
             private BinaryFormatter Bformatter;
         public void Save()
             {
-
+                if (SandL == null)
+                    SandL = new SaveandLoad();
+                var gamefile = new FileStream(filename, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                Bformatter.Serialize(gamefile, SandL);
+                gamefile.Close();
             }
             public void Load()
             {
-
+                var gamefile = new FileStream(filename, FileMode.Open, FileAccess.Read);
+                if (gamefile != null)
+                {
+                    SandL = (SaveandLoad)Bformatter.Deserialize(gamefile);
+                }
             }
         }
        
