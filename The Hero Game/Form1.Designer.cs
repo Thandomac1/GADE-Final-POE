@@ -40,7 +40,7 @@ namespace The_Hero_Game
             this.button3 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
-            this.label2 = new System.Windows.Forms.Label();
+            this.mapLabel = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -134,6 +134,7 @@ namespace The_Hero_Game
             this.button4.TabIndex = 4;
             this.button4.Text = "button4";
             this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
             // button5
             // 
@@ -144,21 +145,20 @@ namespace The_Hero_Game
             this.button5.Text = "button5";
             this.button5.UseVisualStyleBackColor = true;
             // 
-            // label2
+            // mapLabel
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 45);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(38, 15);
-            this.label2.TabIndex = 6;
-            this.label2.Text = "label2";
+            this.mapLabel.AutoSize = true;
+            this.mapLabel.Location = new System.Drawing.Point(12, 45);
+            this.mapLabel.Name = "mapLabel";
+            this.mapLabel.Size = new System.Drawing.Size(0, 15);
+            this.mapLabel.TabIndex = 6;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.label2);
+            this.Controls.Add(this.mapLabel);
             this.Controls.Add(this.button5);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.button3);
@@ -187,7 +187,7 @@ namespace The_Hero_Game
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Button button5;
-        private System.Windows.Forms.Label label2;
+        public System.Windows.Forms.Label mapLabel;
     }
 }
 
