@@ -429,8 +429,17 @@ namespace The_Hero_Game
             get { return mapWidth; }
             set { mapWidth = value; }
         }
+        
         Random obj = new Random();
         public List<Enemy> Enemies = new List<Enemy>();
+        public int getVisionSize()
+        {
+            return getVisionSize();
+        }
+        public int getFriendlyattack()
+        {
+            return getFriendlyattack();
+        }
 
         public List<Item> Items { get; set; }// Task 2 Q.3.1 Making of the item array 
         Label mapLabel = new Label();
@@ -638,6 +647,7 @@ namespace The_Hero_Game
     {
         public Label MapLabel = new Label();
         private Map map;
+        
 
         public Map MAP
         {
@@ -692,6 +702,7 @@ namespace The_Hero_Game
 
             return false;
         }
+        
         public class SaveandLoad
         {
             public string filename = "data.thandomac";
@@ -728,17 +739,16 @@ namespace The_Hero_Game
 
             InitializeComponent();
             GameEngine gameengine = new GameEngine();
-            mapLabel.Text = "Hello";
             gameengine.Showmap();
             mapLabel.Text = gameengine.MapLabel.Text;
 
         }
         private void button1_Click(object sender, EventArgs e)
         {
-            mapLabel.Text = "Hello";
             gameengine.MovePlayer(Character.Movement.Down);
             gameengine.Showmap();
-            
+            mapLabel.Text = gameengine.MAP.ToString();
+
 
         }
 
@@ -751,17 +761,23 @@ namespace The_Hero_Game
         private void button4_Click(object sender, EventArgs e)
         {
             gameengine.MovePlayer(Character.Movement.Left);
+            gameengine.Showmap();
+            mapLabel.Text = gameengine.MAP.ToString();
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
             gameengine.MovePlayer(Character.Movement.up);
-            
+            gameengine.Showmap();
+            mapLabel.Text = gameengine.MAP.ToString();
+
         }
 
         private void button5_Click(object sender, EventArgs e)
         {
             gameengine.MovePlayer(Character.Movement.Right);
+            gameengine.Showmap();
+            mapLabel.Text = gameengine.MAP.ToString();
         }
 
         private void button1_Click_1(object sender, EventArgs e)
@@ -773,10 +789,10 @@ namespace The_Hero_Game
         }
 
 
-        private void button4_Click(object sender, EventArgs e)
-        {
+        //private void button4_Click(object sender, EventArgs e)
+        //{
 
-        }
+        //}
     }
 }
 
