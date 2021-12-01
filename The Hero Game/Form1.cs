@@ -73,6 +73,65 @@ namespace The_Hero_Game
         //public abstract string ToString();
 
     }
+    public abstract class Weapon : Item
+    {
+        protected int wDamage;
+
+        public int WDAMAGE
+        {
+            get { return wDamage; }
+            set { wDamage = value; }
+        }
+        protected int Range;
+        protected int Durability;
+        public int DURABILITY
+        {
+            get { return Durability; }
+            set { Durability = value; }
+        }
+        protected int Cost;
+        public int COST
+        {
+            get { return Cost; }
+            set { Cost = value; }
+        }
+        protected string weaponType;
+        public string WEAPONTYPE
+        {
+            get { return weaponType; }
+            set { weaponType = value; }
+        }
+        public Weapon(int x, int y) : base(x,y)
+        {
+            this.Symbol = "W";
+        }
+    }
+    public class MeleeWeapon : Weapon
+    {
+        public Types melee_Weapons;
+        public enum Types
+        {
+            dagger,
+            longsword,
+        }
+        public MeleeWeapon(Types Melee_weapons, int x, int y) :base(x,y)
+        {
+            this.melee_Weapons = Melee_weapons;
+        }       
+    }
+    public class RangedWeapon : Weapon
+    {
+        public Types range_Weapons;
+        public enum Types
+        {
+            Rifle,
+            Longbow,
+        }
+        public RangedWeapon(Types Range_weapons,int x, int y) :base(x,y)
+        {
+            this.range_Weapons = Range_weapons;
+        }
+    }
 
     public class Gold : Item //Task 2 Q.2.3
     {
@@ -211,6 +270,23 @@ namespace The_Hero_Game
             return info;
         }
 
+    }
+    public class Leader:Enemy
+    {
+        private int Tile;
+        public int TILE
+        {
+            get { return Tile; }
+            set { Tile = value; }
+        }
+        public Leader(int x, int y) :base(x, y, 2,20,20,"L" )
+        {
+
+        }
+        public override Movement returnMove(Movement move)
+        {
+            throw new NotImplementedException();
+        }
     }
     public class Goblin : Enemy
     {
@@ -594,18 +670,24 @@ namespace The_Hero_Game
                         EnemyX = obj.Next(0, mapWidth);
                         EnemyY = obj.Next(0, mapHeight);
                     }
-                    int randomEnemies = obj.Next(2);
+                    int randomEnemies = obj.Next(3);
                     if (randomEnemies == 1)
                     {
                         Goblin NewEnemy = new Goblin(EnemyX, EnemyY);
                         Gmap[EnemyX, EnemyY] = NewEnemy;
                         Enemies.Add(NewEnemy);
                     }
-                    else
+                    else if (randomEnemies == 2)
                     {
                         Mage New_enemy = new Mage(EnemyX, EnemyY); //   Task 2 Q.3.1
                         Gmap[EnemyX, EnemyY] = New_enemy;
                         Enemies.Add(New_enemy);
+                    }
+                    else
+                    {
+                        Leader new_enemy = new Leader(EnemyX, EnemyY); // Final POE Q.3.1
+                        Gmap[EnemyX, EnemyY] = new_enemy;
+                        Enemies.Add(new_enemy);
                     }
                     break;
                 case Character.Tiletype.Gold:
@@ -640,6 +722,17 @@ namespace The_Hero_Game
                 }
             }
             return null;
+        }
+    }
+    public class Shop
+    {
+        private int[] weapons = new int[3];
+        Random rweapons = new Random();
+        private Hero Buyer;
+
+        public Shop(Character buyer)
+        {
+            
         }
     }
     [Serializable]
