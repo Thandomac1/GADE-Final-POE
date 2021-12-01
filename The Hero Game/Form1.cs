@@ -740,6 +740,11 @@ namespace The_Hero_Game
         {
             
         }
+        //private Weapon RandomWeapon()
+        //{
+        //    Weapon randomWeapon;
+        //    return 
+        //}
     }
     [Serializable]
     public class GameEngine
