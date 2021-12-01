@@ -172,6 +172,12 @@ namespace The_Hero_Game
         protected int max_Hp;
         protected int Damage;
         protected int Goldpurse;
+        protected Weapon weapons;
+        public Weapon WEAPONS
+        {
+            get { return weapons; }
+            set { weapons = value; }
+        }
 
         public Tile[] vision;
         public enum Movement
