@@ -151,6 +151,7 @@ namespace The_Hero_Game
             // mapLabel
             // 
             this.mapLabel.AutoSize = true;
+            this.mapLabel.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.mapLabel.Location = new System.Drawing.Point(12, 45);
             this.mapLabel.Name = "mapLabel";
             this.mapLabel.Size = new System.Drawing.Size(0, 15);

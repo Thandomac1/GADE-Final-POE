@@ -13,6 +13,69 @@ using System.IO;
 namespace The_Hero_Game
 {
 
+    public partial class Form1 : Form
+    {
+        GameEngine gameengine = new GameEngine();
+        public Form1()
+        {
+
+            InitializeComponent();
+            GameEngine gameengine = new GameEngine();
+            gameengine.Showmap();
+            mapLabel.Text = gameengine.MapLabel.Text;
+
+        }
+        private void button1_Click(object sender, EventArgs e)
+        {
+            gameengine.MovePlayer(Character.Movement.Down);
+            gameengine.Showmap();
+            mapLabel.Text = gameengine.MAP.ToString();
+
+
+        }
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+        
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            gameengine.MovePlayer(Character.Movement.Left);
+            gameengine.Showmap();
+            mapLabel.Text = gameengine.MAP.ToString();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            gameengine.MovePlayer(Character.Movement.up);
+            gameengine.Showmap();
+            mapLabel.Text = gameengine.MAP.ToString();
+
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            gameengine.MovePlayer(Character.Movement.Right);
+            gameengine.Showmap();
+            mapLabel.Text = gameengine.MAP.ToString();
+        }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            
+            gameengine.MovePlayer(Character.Movement.Down);
+            gameengine.Showmap();
+            mapLabel.Text = gameengine.MAP.ToString();
+        }
+
+
+        //private void button4_Click(object sender, EventArgs e)
+        //{
+
+        //}
+    }
     public abstract class Tile //Question 2.1
     {
         protected int X;
@@ -44,7 +107,10 @@ namespace The_Hero_Game
             Empty,
             barrier,
         }
+        public Tile()
+        {
 
+        }
         public Tile(int x, int y)
         {
             this.X = x;
@@ -64,7 +130,10 @@ namespace The_Hero_Game
 
     public class Item : Tile // Task 2 Q.2.1
     {
+        public Item()
+        {
 
+        }
         public Item(int x, int y) : base(x, y)
         {
             this.X = x;
@@ -83,6 +152,10 @@ namespace The_Hero_Game
             set { wDamage = value; }
         }
         protected int Range;
+        public virtual int RANGE()
+        {
+            return Range;
+        }
         protected int Durability;
         public int DURABILITY
         {
@@ -101,37 +174,86 @@ namespace The_Hero_Game
             get { return weaponType; }
             set { weaponType = value; }
         }
-        public Weapon(int x, int y) : base(x,y)
+        public Weapon(int x, int y) : base(x, y)
         {
             this.Symbol = "W";
+        }
+        public Weapon()
+        {
+
         }
     }
     public class MeleeWeapon : Weapon
     {
+        string weapon;
+        int wdamage;
+        int durability;
+        int cost;
+
         public Types melee_Weapons;
         public enum Types
         {
             dagger,
             longsword,
         }
-        public MeleeWeapon(Types Melee_weapons, int x, int y) :base(x,y)
+        
+        public MeleeWeapon(int x, int y, string weapon) : base(x, y)
         {
-            this.melee_Weapons = Melee_weapons;
-        }       
+            switch (weapon)
+            {
+                case "dagger":
+                    this.durability = 10;
+                    this.wdamage = 3;
+                    this.cost = 3;
+                    break;
+                case "Longsword":
+                    this.durability = 6;
+                    this.wdamage = 4;
+                    this.cost = 5;
+                    break;                   
+            }
+        }
+        public override int RANGE()
+        {
+            return 1;
+        }
     }
+    
     public class RangedWeapon : Weapon
     {
+        string weapon;
+        int wdamage;
+        int durability;
+        int cost;
+        int range;
+
         public Types range_Weapons;
         public enum Types
         {
             Rifle,
             Longbow,
         }
-        public RangedWeapon(Types Range_weapons,int x, int y) :base(x,y)
+       
+        public RangedWeapon(int x, int y, string weapon) : base(x, y)
         {
-            this.range_Weapons = Range_weapons;
+            switch (weapon)
+            {
+                case "Rifle":
+                    this.durability = 3;
+                    this.range = 3;
+                    this.wdamage = 5;
+                    this.cost = 7;
+                    break;
+                case "Longbow":
+                    this.durability = 4;
+                    this.range = 2;
+                    this.wdamage = 4;
+                    this.cost = 6;
+                    break;
+            }
         }
     }
+   
 
     public class Gold : Item //Task 2 Q.2.3
     {
@@ -179,7 +301,8 @@ namespace The_Hero_Game
             set { weapons = value; }
         }
 
-        public Tile[] vision;
+        public List<Tile> vision = new List<Tile>();
+        
         public enum Movement
         {
             No_movement,
@@ -193,6 +316,7 @@ namespace The_Hero_Game
         public Character(int x, int y, string symbol) : base(x, y)
         {
             this.Symbol = symbol;
+            
         }
         public void Pickup(Item i)
         {
@@ -253,6 +377,13 @@ namespace The_Hero_Game
                     break;
             }
         }
+        public void setVision(Tile[,] gmap)
+        {
+            this.vision.Add(gmap[X - 1, Y]);
+            this.vision.Add(gmap[X + 1, Y]);
+            this.vision.Add(gmap[X,Y + 1]);
+            this.vision.Add(gmap[X,Y - 1]);
+        }
         public abstract override string ToString();
         //public abstract movementEnum();
     }
@@ -265,6 +396,7 @@ namespace The_Hero_Game
             this.Damage = damage;
             this.Hp = hp;
             this.max_Hp = max_hp;
+            
 
         }
         public override string ToString()
@@ -277,21 +409,52 @@ namespace The_Hero_Game
         }
 
     }
-    public class Leader:Enemy
+    public class Leader : Enemy
     {
+        public int[] leaderpos_x = new int[2];
+        public int[] leaderpos_y = new int[2];
+        private Map map;
+        public Map MAP
+        {
+            get { return map; }
+            set { map = value; }
+        }
+
         private int Tile;
         public int TILE
         {
             get { return Tile; }
             set { Tile = value; }
         }
-        public Leader(int x, int y) :base(x, y, 2,20,20,"L" )
+        public Leader(int x, int y) : base(x, y, 2, 20, 20, "L")
         {
 
         }
         public override Movement returnMove(Movement move)
         {
-            throw new NotImplementedException();
+            int RandomTileIndex = r.Next(0, vision.Count + 1);
+
+            while (vision[RandomTileIndex].typeofTile.Equals(typeof(EmptyTile)))
+            {
+                RandomTileIndex = r.Next(0, vision.Count);
+            }
+            if (vision[RandomTileIndex].getX() > X)
+            {
+                return Movement.Right;
+            }
+            else if (vision[RandomTileIndex].getX() < X)
+            {
+                return Movement.Left;
+            }
+            else if (vision[RandomTileIndex].getY() > Y)
+            {
+                return Movement.Down;
+            }
+            else if (vision[RandomTileIndex].getY() < Y)
+            {
+                return Movement.up;
+            }
+            return Movement.No_movement;
         }
     }
     public class Goblin : Enemy
@@ -303,11 +466,11 @@ namespace The_Hero_Game
         }
         public override Movement returnMove(Movement move = Movement.No_movement)
         {
-            int RandomTileIndex = r.Next(0, vision.Length + 1);
+            int RandomTileIndex = r.Next(0, vision.Count + 1);
 
             while (vision[RandomTileIndex].typeofTile.Equals(typeof(EmptyTile)))
             {
-                RandomTileIndex = r.Next(0, vision.Length);
+                RandomTileIndex = r.Next(0, vision.Count);
             }
             if (vision[RandomTileIndex].getX() > X)
             {
@@ -370,7 +533,7 @@ namespace The_Hero_Game
             switch (move)
             {
                 case Movement.up:
-                    if (this.vision[(int)Character.Movement.up] is EmptyTile || this.vision[(int)Character.Movement.up] is Item)
+                    if (this.vision[0] is EmptyTile || this.vision[0] is Item)
                     {
                         return Movement.up;
                     }
@@ -379,7 +542,7 @@ namespace The_Hero_Game
                         return Movement.No_movement;
                     }
                 case Movement.Down:
-                    if (this.vision[(int)Character.Movement.Down] is EmptyTile || this.vision[(int)Character.Movement.Down] is Item)
+                    if (this.vision[1] is EmptyTile || this.vision[1] is Item)
                     {
                         return Movement.Down;
                     }
@@ -388,7 +551,7 @@ namespace The_Hero_Game
                         return Movement.No_movement;
                     }
                 case Movement.Right:
-                    if (this.vision[(int)Character.Movement.Right] is EmptyTile || this.vision[(int)Character.Movement.Right] is Item)
+                    if (this.vision[2] is EmptyTile || this.vision[2] is Item)
                     {
                         return Movement.Right;
                     }
@@ -397,7 +560,7 @@ namespace The_Hero_Game
                         return Movement.No_movement;
                     }
                 case Movement.Left:
-                    if (this.vision[(int)Character.Movement.Left] is EmptyTile || this.vision[(int)Character.Movement.Left] is Item)
+                    if (this.vision[3] is EmptyTile || this.vision[3] is Item)
                     {
                         return Movement.Left;
                     }
@@ -511,7 +674,7 @@ namespace The_Hero_Game
             get { return mapWidth; }
             set { mapWidth = value; }
         }
-        
+
         Random obj = new Random();
         public List<Enemy> Enemies = new List<Enemy>();
         public int getVisionSize()
@@ -523,7 +686,7 @@ namespace The_Hero_Game
             return getFriendlyattack();
         }
 
-        public List<Item> Items { get; set; }// Task 2 Q.3.1 Making of the item array 
+        public List<Item> Items = new List<Item>(); // Task 2 Q.3.1 Making of the item array 
         Label mapLabel = new Label();
 
         public Map()
@@ -537,7 +700,8 @@ namespace The_Hero_Game
             Gmap = new Tile[mapWidth, mapHeight];
             fillEmpty();
             Mapcreate(numenemies);
-            //updateVision();
+            updateVision();
+            
         }
         public int randomize(int min, int max)
         {
@@ -561,7 +725,7 @@ namespace The_Hero_Game
         {
             string mapstring = "";
 
-            for (int y = 0; y < mapWidth; y++)
+            for (int y = 0; y < mapHeight; y++)
             {
                 for (int x = 0; x < mapWidth; x++)
                 {
@@ -575,45 +739,45 @@ namespace The_Hero_Game
 
         public void updateVision()
         {
-            //foreach (Enemy E in Enemies)
-            //{
-            //    E.Vision.Clear();
+            foreach (Enemy E in Enemies)
+            {
+                E.vision.Clear();
 
-            //    if (E.X > 0)
-            //    {
-            //        E.Vision.Add(Gmap[E.X - 1, E.Y]);
-            //    }
-            //    if (E.X < mapWidth)
-            //    {
-            //        E.Vision.Add(Gmap[E.X + 1, E.Y]);
-            //    }
-            //    if (E.X > 0)
-            //    {
-            //        E.Vision.Add(Gmap[E.X - 1, E.Y]);
-            //    }
-            //    if (E.X < 0)
-            //    {
-            //        E.Vision.Add(Gmap[E.X + 1, E.Y]);
-            //    }
-            //}
-            //Playerhero.Vision.Clear();
+                if (E.getX() > 0)
+                {
+                    E.vision.Add(Gmap[E.getX() - 1, E.getY()]);
+                }
+                if (E.getX() < mapHeight)
+                {
+                    E.vision.Add(Gmap[E.getX() + 1, E.getY()]);
+                }
+                if (E.getX() > 0)
+                {
+                    E.vision.Add(Gmap[E.getX() - 1, E.getY()]);
+                }
+                if (E.getX() < mapWidth)
+                {
+                    E.vision.Add(Gmap[E.getX() + 1, E.getY()]);
+                }
+            }
+            Playerhero.vision.Clear();
 
-            //if (Playerhero.X > 0)
-            //{
-            //    Playerhero.Vision.Add(Gmap[Playerhero.X - 1, Playerhero.Y]);
-            //}
-            //if (Playerhero.X < mapWidth)
-            //{
-            //    Playerhero.Vision.Add(Gmap[Playerhero.X + 1, Playerhero.Y]);
-            //}
-            //if (Playerhero.X > 0)
-            //{
-            //    Playerhero.Vision.Add(Gmap[Playerhero.X, Playerhero.Y - 1]);
-            //}
-            //if (Playerhero.X < mapHeight)
-            //{
-            //    Playerhero.Vision.Add(Gmap[Playerhero.X, Playerhero.Y + 1]);
-            //}
+            if (Playerhero.getX() > 0)
+            {
+                Playerhero.vision.Add(Gmap[Playerhero.getX() - 1, Playerhero.getY()]);
+            }
+            if (Playerhero.getX() < mapHeight)
+            {
+                Playerhero.vision.Add(Gmap[Playerhero.getX() + 1, Playerhero.getY()]);
+            }
+            if (Playerhero.getX() > 0)
+            {
+                Playerhero.vision.Add(Gmap[Playerhero.getX(), Playerhero.getY() - 1]);
+            }
+            if (Playerhero.getX() < mapWidth)
+            {
+                Playerhero.vision.Add(Gmap[Playerhero.getX(), Playerhero.getY() + 1]);
+            }
         }
 
         public void Mapcreate(int numenemies)
@@ -623,7 +787,7 @@ namespace The_Hero_Game
             {
                 for (int x = 0; x < mapHeight; x++)
                 {
-                    if (x == 0 || x == mapHeight- 1 || y == 0 || y == mapWidth - 1)
+                    if (x == 0 || x == mapHeight - 1 || y == 0 || y == mapWidth - 1)
                     {
                         Create(Character.Tiletype.barrier, y, x);
                     }
@@ -703,7 +867,7 @@ namespace The_Hero_Game
             }
 
         }
-        
+
 
         public static implicit operator int(Map v)
         {
@@ -732,18 +896,27 @@ namespace The_Hero_Game
     }
     public class Shop
     {
-        private int[] weapons = new int[3];
-        Random rweapons = new Random();
+        private Weapon[] weapons = new Weapon[3];
+
         private Hero Buyer;
 
         public Shop(Character buyer)
         {
-            
+            int rdm_weapon;
+           
+            Random rweapons = new Random();
+            for (int w = 0; w < 4; w++)
+            {
+                
+            }
         }
         //private Weapon RandomWeapon()
         //{
-        //    Weapon randomWeapon;
-        //    return 
+
+        //}
+        //public bool CanBuy(Hero buyer)
+        //{
+            
         //}
     }
     [Serializable]
@@ -751,7 +924,7 @@ namespace The_Hero_Game
     {
         public Label MapLabel = new Label();
         private Map map;
-        
+
 
         public Map MAP
         {
@@ -775,9 +948,9 @@ namespace The_Hero_Game
                 }
                 MapLabel.Text += "\n";
             }
-            
+
         }
-        
+
         public bool MovePlayer(Character.Movement direction)
         {
             Tile H;
@@ -806,13 +979,13 @@ namespace The_Hero_Game
 
             return false;
         }
-        
+
         public class SaveandLoad
         {
             public string filename = "data.thandomac";
             private SaveandLoad SandL;
             private BinaryFormatter Bformatter;
-        public void Save()
+            public void Save()
             {
                 if (SandL == null)
                     SandL = new SaveandLoad();
@@ -829,74 +1002,10 @@ namespace The_Hero_Game
                 }
             }
         }
-       
-        
-        
-
-    }
-
-    public partial class Form1 : Form
-    {
-        GameEngine gameengine = new GameEngine();
-        public Form1()
-        {
-
-            InitializeComponent();
-            GameEngine gameengine = new GameEngine();
-            gameengine.Showmap();
-            mapLabel.Text = gameengine.MapLabel.Text;
-
-        }
-        private void button1_Click(object sender, EventArgs e)
-        {
-            gameengine.MovePlayer(Character.Movement.Down);
-            gameengine.Showmap();
-            mapLabel.Text = gameengine.MAP.ToString();
 
 
-        }
-
-        private void panel1_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-        
-
-        private void button4_Click(object sender, EventArgs e)
-        {
-            gameengine.MovePlayer(Character.Movement.Left);
-            gameengine.Showmap();
-            mapLabel.Text = gameengine.MAP.ToString();
-        }
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-            gameengine.MovePlayer(Character.Movement.up);
-            gameengine.Showmap();
-            mapLabel.Text = gameengine.MAP.ToString();
-
-        }
-
-        private void button5_Click(object sender, EventArgs e)
-        {
-            gameengine.MovePlayer(Character.Movement.Right);
-            gameengine.Showmap();
-            mapLabel.Text = gameengine.MAP.ToString();
-        }
-
-        private void button1_Click_1(object sender, EventArgs e)
-        {
-            
-            gameengine.MovePlayer(Character.Movement.Down);
-            gameengine.Showmap();
-            mapLabel.Text = gameengine.MAP.ToString();
-        }
 
 
-        //private void button4_Click(object sender, EventArgs e)
-        //{
-
-        //}
     }
 }
 
