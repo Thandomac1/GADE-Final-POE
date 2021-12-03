@@ -58,9 +58,10 @@ namespace The_Hero_Game
             // 
             this.richTextBox1.Location = new System.Drawing.Point(492, 12);
             this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(305, 48);
+            this.richTextBox1.Size = new System.Drawing.Size(305, 73);
             this.richTextBox1.TabIndex = 1;
             this.richTextBox1.Text = "";
+            this.richTextBox1.TextChanged += new System.EventHandler(this.richTextBox1_TextChanged);
             // 
             // panel1
             // 
@@ -70,9 +71,9 @@ namespace The_Hero_Game
             this.panel1.Controls.Add(this.richTextBox3);
             this.panel1.Controls.Add(this.Attack);
             this.panel1.Controls.Add(this.richTextBox2);
-            this.panel1.Location = new System.Drawing.Point(492, 66);
+            this.panel1.Location = new System.Drawing.Point(492, 91);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(305, 299);
+            this.panel1.Size = new System.Drawing.Size(305, 274);
             this.panel1.TabIndex = 2;
             this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
@@ -109,6 +110,7 @@ namespace The_Hero_Game
             this.Attack.TabIndex = 3;
             this.Attack.Text = "Attack";
             this.Attack.UseVisualStyleBackColor = true;
+            this.Attack.Click += new System.EventHandler(this.Attack_Click);
             // 
             // richTextBox2
             // 

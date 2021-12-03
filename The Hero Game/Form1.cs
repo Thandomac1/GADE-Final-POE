@@ -16,12 +16,15 @@ namespace The_Hero_Game
     public partial class Form1 : Form
     {
         GameEngine gameengine = new GameEngine();
+        
+        
         public Form1()
         {
 
             InitializeComponent();
             gameengine.Showmap();
             mapLabel.Text = gameengine.MapLabel.Text;
+            updateForm();
 
         }
         private void button1_Click(object sender, EventArgs e)
@@ -44,6 +47,7 @@ namespace The_Hero_Game
             gameengine.MovePlayer(Character.Movement.Left);
             gameengine.Showmap();
             mapLabel.Text = gameengine.MAP.ToString();
+            updateForm();
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -51,7 +55,7 @@ namespace The_Hero_Game
             gameengine.MovePlayer(Character.Movement.up);
             gameengine.Showmap();
             mapLabel.Text = gameengine.MAP.ToString();
-
+            updateForm();
         }
 
         private void button5_Click(object sender, EventArgs e)
@@ -59,6 +63,8 @@ namespace The_Hero_Game
             gameengine.MovePlayer(Character.Movement.Right);
             gameengine.Showmap();
             mapLabel.Text = gameengine.MAP.ToString();
+            updateForm();
+
         }
 
         private void button1_Click_1(object sender, EventArgs e)
@@ -66,7 +72,23 @@ namespace The_Hero_Game
             
             gameengine.MovePlayer(Character.Movement.Down);
             gameengine.Showmap();
-            //mapLabel.Text = gameengine.MAP.ToString();
+            mapLabel.Text = gameengine.MAP.ToString();
+            updateForm();
+        }
+
+        private void richTextBox1_TextChanged(object sender, EventArgs e)
+        {
+            
+        }
+        public void updateForm()
+        {
+
+            richTextBox1.Text = gameengine.MAP.PLAYERHERO.ToString();
+        }
+
+        private void Attack_Click(object sender, EventArgs e)
+        {
+
         }
 
 
@@ -395,6 +417,10 @@ namespace The_Hero_Game
             this.vision.Add(gmap[X,Y - 1]);
             this.vision.Add(gmap[X,Y + 1]);
         }
+        public void damage(int dmg)
+        {
+            this.Hp -= dmg;
+        }
         public abstract override string ToString();
         //public abstract movementEnum();
     }
@@ -552,8 +578,11 @@ namespace The_Hero_Game
     public class Hero : Character
     {
 
-        public Hero(int x, int y, int hp) : base(x, y, "H")
+        public Hero(int x, int y, int hp, int max_hp, int damage) : base(x, y, "H")
         {
+            this.Hp = 50;
+            this.max_Hp = 50;
+            this.Damage = 2;
 
         }
 
@@ -604,10 +633,10 @@ namespace The_Hero_Game
         public override string ToString()
         {
             string info = "Player Stats:" + "\n";
-            info += "Hp:" + Hp.ToString() + "/" + max_Hp.ToString() + "\n";
-            info += "Damage:" + Damage.ToString() + "\n";
+            info += "Hp:" + Hp + "/" + max_Hp + "\n";
+            info += "Damage:" + Damage + "\n";
             info += "[" + X.ToString() + "," + Y.ToString() + "] \n";
-            info += "Gold amount:" + Goldpurse.ToString(); //Task 2 Question 3.2
+            info += "Gold amount:" + Goldpurse; //Task 2 Question 3.2
             return info;
         }
         bool CheckforValidMove(Movement move)
@@ -670,6 +699,10 @@ namespace The_Hero_Game
                     break;
             }
             return isValid;
+        }
+        public override void Attack(Character Target)
+        {
+            Target.damage(this.Damage);
         }
 
         internal bool getGoldpurse()
@@ -857,6 +890,7 @@ namespace The_Hero_Game
             {
                 Playerhero.vision.Add(Gmap[Playerhero.getX(), Playerhero.getY() + 1]);
             }
+            
         }
 
         public void Mapcreate(int numenemies)
@@ -906,7 +940,7 @@ namespace The_Hero_Game
                         heroY = obj.Next(0, mapHeight);
                     }
 
-                    Hero NewHero = new Hero(heroX, heroY, 10);
+                    Hero NewHero = new Hero(heroX, heroY, 50, 50, 2);
                     Playerhero = NewHero;
                     Gmap[heroX, heroY] = NewHero;
                     break;
@@ -1090,7 +1124,7 @@ namespace The_Hero_Game
 
         public GameEngine()
         {
-            map = new Map(10, 20, 10, 20, 5, 5,3);
+            map = new Map(15, 30, 15, 30, 5, 5,3);
 
         }
         public void Showmap()
@@ -1153,11 +1187,9 @@ namespace The_Hero_Game
                     SandL = (SaveandLoad)Bformatter.Deserialize(gamefile);
                 }
             }
-        }
-
-
-
-
+        }   
     }
+    
+    
 }
 
