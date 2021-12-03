@@ -20,7 +20,6 @@ namespace The_Hero_Game
         {
 
             InitializeComponent();
-            GameEngine gameengine = new GameEngine();
             gameengine.Showmap();
             mapLabel.Text = gameengine.MapLabel.Text;
 
@@ -197,16 +196,16 @@ namespace The_Hero_Game
             longsword,
         }
         
-        public MeleeWeapon(int x, int y, string weapon) : base(x, y)
+        public MeleeWeapon(int x, int y, Types meleeWeapon) : base(x, y)
         {
-            switch (weapon)
+            switch (meleeWeapon)
             {
-                case "dagger":
+                case Types.dagger:
                     this.durability = 10;
                     this.wdamage = 3;
                     this.cost = 3;
                     break;
-                case "Longsword":
+                case Types.longsword:
                     this.durability = 6;
                     this.wdamage = 4;
                     this.cost = 5;
@@ -234,17 +233,17 @@ namespace The_Hero_Game
             Longbow,
         }
        
-        public RangedWeapon(int x, int y, string weapon) : base(x, y)
+        public RangedWeapon(int x, int y, Types rangeWeapon) : base(x, y)
         {
-            switch (weapon)
+            switch (rangeWeapon)
             {
-                case "Rifle":
+                case Types.Rifle:
                     this.durability = 3;
                     this.range = 3;
                     this.wdamage = 5;
                     this.cost = 7;
                     break;
-                case "Longbow":
+                case Types.Longbow:
                     this.durability = 4;
                     this.range = 2;
                     this.wdamage = 4;
@@ -257,7 +256,7 @@ namespace The_Hero_Game
 
     public class Gold : Item //Task 2 Q.2.3
     {
-        private int goldAmount;
+        protected int goldAmount;
 
         public int getGold()
         {
@@ -284,7 +283,7 @@ namespace The_Hero_Game
         public EmptyTile(int x, int y) : base(x, y)
         {
             this.typeofTile = Tiletype.Empty;
-            this.Symbol = "=";
+            this.Symbol = ".";
         }
     }
 
@@ -294,6 +293,11 @@ namespace The_Hero_Game
         protected int max_Hp;
         protected int Damage;
         protected int Goldpurse;
+        public int getGoldpurse
+        {
+            get { return Goldpurse; }
+            set { Goldpurse = value; }
+        }
         protected Weapon weapons;
         public Weapon WEAPONS
         {
@@ -321,11 +325,13 @@ namespace The_Hero_Game
         public void Pickup(Item i)
         {
             Gold number;
+            Weapon Number;
             if (i is Gold)
             {
                 number = (Gold)i;
                 Goldpurse = Goldpurse + number.getGold();
             }
+            
         }
         public string getSymbol()
         {
@@ -364,13 +370,13 @@ namespace The_Hero_Game
             switch (Move)
             {
                 case Movement.up:
-                    Y--;
+                    X--;
                     break;
                 case Movement.Down:
-                    Y++;
+                    X++;
                     break;
                 case Movement.Left:
-                    X--;
+                    Y--;
                     break;
                 case Movement.Right:
                     Y++;
@@ -381,8 +387,8 @@ namespace The_Hero_Game
         {
             this.vision.Add(gmap[X - 1, Y]);
             this.vision.Add(gmap[X + 1, Y]);
-            this.vision.Add(gmap[X,Y + 1]);
             this.vision.Add(gmap[X,Y - 1]);
+            this.vision.Add(gmap[X,Y + 1]);
         }
         public abstract override string ToString();
         //public abstract movementEnum();
@@ -550,19 +556,19 @@ namespace The_Hero_Game
                     {
                         return Movement.No_movement;
                     }
-                case Movement.Right:
+                case Movement.Left:
                     if (this.vision[2] is EmptyTile || this.vision[2] is Item)
                     {
-                        return Movement.Right;
+                        return Movement.Left;
                     }
                     else
                     {
                         return Movement.No_movement;
                     }
-                case Movement.Left:
+                case Movement.Right:
                     if (this.vision[3] is EmptyTile || this.vision[3] is Item)
                     {
-                        return Movement.Left;
+                        return Movement.Right;
                     }
                     else
                     {
@@ -590,7 +596,7 @@ namespace The_Hero_Game
                 case Movement.Right:
                     foreach (Tile T in vision)
                     {
-                        if (T.getX() == X + 1)
+                        if (T.getY() == Y + 1)
                         {
                             if (T.typeofTile == Tiletype.Empty)
                             {
@@ -603,7 +609,7 @@ namespace The_Hero_Game
                 case Movement.Left:
                     foreach (Tile T in vision)
                     {
-                        if (T.getX() == X - 1)
+                        if (T.getY() == Y - 1)
                         {
                             if (T.typeofTile == Tiletype.Empty)
                             {
@@ -641,6 +647,11 @@ namespace The_Hero_Game
                     break;
             }
             return isValid;
+        }
+
+        internal bool getGoldpurse()
+        {
+            throw new NotImplementedException();
         }
     }
     public class Map
@@ -698,7 +709,7 @@ namespace The_Hero_Game
             mapHeight = randomize(min_height, max_height);
             mapWidth = randomize(min_width, max_width);
             Gmap = new Tile[mapWidth, mapHeight];
-            fillEmpty();
+            //fillEmpty();
             Mapcreate(numenemies);
             updateVision();
             
@@ -717,7 +728,11 @@ namespace The_Hero_Game
             {
                 for (int j = mapHeight; j < mapHeight; j++)
                 {
-                    Gmap[i, j] = new EmptyTile(i, j);
+                    
+                    if (Gmap[i,j] == null)
+                    {
+                        Gmap[i, j] = new EmptyTile(i, j);
+                    }
                 }
             }
         }
@@ -725,11 +740,11 @@ namespace The_Hero_Game
         {
             string mapstring = "";
 
-            for (int y = 0; y < mapHeight; y++)
+            for (int y = 0; y < mapWidth; y++)
             {
-                for (int x = 0; x < mapWidth; x++)
+                for (int x = 0; x < mapHeight; x++)
                 {
-                    mapstring += Gmap[x, y].Symbol;
+                    mapstring += Gmap[y, x].Symbol;
                 }
                 mapstring += "\n";
 
@@ -751,13 +766,13 @@ namespace The_Hero_Game
                 {
                     E.vision.Add(Gmap[E.getX() + 1, E.getY()]);
                 }
-                if (E.getX() > 0)
+                if (E.getY() > 0)
                 {
-                    E.vision.Add(Gmap[E.getX() - 1, E.getY()]);
+                    E.vision.Add(Gmap[E.getX(), E.getY()-1]);
                 }
-                if (E.getX() < mapWidth)
+                if (E.getY() < mapWidth)
                 {
-                    E.vision.Add(Gmap[E.getX() + 1, E.getY()]);
+                    E.vision.Add(Gmap[E.getX(), E.getY()+1]);
                 }
             }
             Playerhero.vision.Clear();
@@ -770,11 +785,11 @@ namespace The_Hero_Game
             {
                 Playerhero.vision.Add(Gmap[Playerhero.getX() + 1, Playerhero.getY()]);
             }
-            if (Playerhero.getX() > 0)
+            if (Playerhero.getY() > 0)
             {
                 Playerhero.vision.Add(Gmap[Playerhero.getX(), Playerhero.getY() - 1]);
             }
-            if (Playerhero.getX() < mapWidth)
+            if (Playerhero.getY() < mapWidth)
             {
                 Playerhero.vision.Add(Gmap[Playerhero.getX(), Playerhero.getY() + 1]);
             }
@@ -902,21 +917,42 @@ namespace The_Hero_Game
 
         public Shop(Character buyer)
         {
-            int rdm_weapon;
-           
-            Random rweapons = new Random();
             for (int w = 0; w < 4; w++)
             {
-                
+                weapons[w] = RandomWeapon();
             }
-        }
-        //private Weapon RandomWeapon()
-        //{
 
-        //}
-        //public bool CanBuy(Hero buyer)
+        }
+        private Weapon RandomWeapon()
+        {
+            Random rweapons = new Random();
+            int rdm_weapon;
+            rdm_weapon = rweapons.Next(1, 5);
+            switch (rdm_weapon)
+            {
+                case 1:
+                    return new MeleeWeapon(0, 0, MeleeWeapon.Types.dagger);
+                case 2:
+                    return new MeleeWeapon(0, 0, MeleeWeapon.Types.longsword);
+                case 3:
+                    return new RangedWeapon(0, 0, RangedWeapon.Types.Rifle);
+                case 4:
+                    return new RangedWeapon(0, 0, RangedWeapon.Types.Rifle);
+                default:
+                    return new MeleeWeapon(0, 0, MeleeWeapon.Types.dagger);
+            }
+
+        }
+        //public bool CanBuy(int price)
         //{
-            
+        //    if (Buyer.getGoldpurse() >= price)
+        //    {
+        //        return true;
+        //    }
+        //    else
+        //    {
+        //        return false;
+        //    }
         //}
     }
     [Serializable]
@@ -940,14 +976,7 @@ namespace The_Hero_Game
         public void Showmap()
         {
 
-            for (int y = 0; y < map.MAPWIDTH; y++)
-            {
-                for (int x = 0; x < map.MAPHEIGHT; x++)
-                {
-                    MapLabel.Text = MapLabel.Text + map.GMAP[y, x].Symbol;
-                }
-                MapLabel.Text += "\n";
-            }
+            MapLabel.Text = map.ToString();
 
         }
 
@@ -958,16 +987,17 @@ namespace The_Hero_Game
             Item i;
             if (map.PLAYERHERO.returnMove(direction) == direction)
             {
-                H = map.PLAYERHERO;
+               
                 x = map.PLAYERHERO.getX();
                 y = map.PLAYERHERO.getY();
                 map.PLAYERHERO.move(direction);
-                i = map.getItemAtPosition(map.PLAYERHERO.getX(), map.PLAYERHERO.getX());
+                H = map.PLAYERHERO;
+                i = map.getItemAtPosition(map.PLAYERHERO.getX(), map.PLAYERHERO.getY());
                 if (i is Gold)
                 {
                     map.PLAYERHERO.Pickup(i);
                 }
-                map.GMAP[map.PLAYERHERO.getY(), map.PLAYERHERO.getX()] = H;
+                map.GMAP[map.PLAYERHERO.getX(), map.PLAYERHERO.getY()] = H;
                 map.GMAP[x, y] = new EmptyTile(x, y);
 
                 map.updateVision();
