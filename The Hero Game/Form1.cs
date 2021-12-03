@@ -133,7 +133,7 @@ namespace The_Hero_Game
         {
 
         }
-        public Item(int x, int y) : base(x, y)
+        public Item(int x, int y, string symbol) : base(x, y)
         {
             this.X = x;
             this.Y = y;
@@ -173,7 +173,7 @@ namespace The_Hero_Game
             get { return weaponType; }
             set { weaponType = value; }
         }
-        public Weapon(int x, int y) : base(x, y)
+        public Weapon(int x, int y) : base(x, y, "W")
         {
             this.Symbol = "W";
         }
@@ -196,19 +196,21 @@ namespace The_Hero_Game
             longsword,
         }
         
-        public MeleeWeapon(int x, int y, string weapon) : base(x, y)
+        public MeleeWeapon(int x, int y, Types meleeWeapon) : base(x, y)
         {
-            switch (weapon)
+            switch (meleeWeapon)
             {
                 case Types.dagger:
                     this.durability = 10;
                     this.wdamage = 3;
                     this.cost = 3;
+                    this.Symbol = "D";
                     break;
                 case Types.longsword:
                     this.durability = 6;
                     this.wdamage = 4;
                     this.cost = 5;
+                    this.Symbol = "S";
                     break;                   
             }
         }
@@ -242,12 +244,14 @@ namespace The_Hero_Game
                     this.range = 3;
                     this.wdamage = 5;
                     this.cost = 7;
+                    this.Symbol = "R";
                     break;
                 case Types.Longbow:
                     this.durability = 4;
                     this.range = 2;
                     this.wdamage = 4;
                     this.cost = 6;
+                    this.Symbol = "B";
                     break;
             }
         }
@@ -270,10 +274,11 @@ namespace The_Hero_Game
         }
         private Random goldObj = new Random();
 
-        public Gold(int x, int y) : base(x, y)
+        public Gold(int x, int y) : base(x, y, "O")
         {
             this.X = x;
             this.Y = y;
+            this.Symbol = "O";
             goldAmount = goldObj.Next(1, 5);
         }
     }
@@ -438,29 +443,38 @@ namespace The_Hero_Game
         }
         public override Movement returnMove(Movement move)
         {
-            int RandomTileIndex = r.Next(0, vision.Count + 1);
-
-            while (vision[RandomTileIndex].typeofTile.Equals(typeof(EmptyTile)))
+            switch (move)
             {
-                RandomTileIndex = r.Next(0, vision.Count);
-            }
-            if (vision[RandomTileIndex].getX() > X)
-            {
-                return Movement.Right;
-            }
-            else if (vision[RandomTileIndex].getX() < X)
-            {
-                return Movement.Left;
-            }
-            else if (vision[RandomTileIndex].getY() > Y)
-            {
-                return Movement.Down;
-            }
-            else if (vision[RandomTileIndex].getY() < Y)
-            {
-                return Movement.up;
+                case Movement.up:
+                    if ( (this.vision[0] is EmptyTile))
+                    {
+                        return Movement.up;
+                    }
+                    break;
+                case Movement.Down:
+                    if ((this.vision[1] is EmptyTile))
+                    {
+                        return Movement.Down;
+                    }
+                    break;
+                case Movement.Left:
+                    if ( (this.vision[2] is EmptyTile))
+                    {
+                        return Movement.Left;
+                    }
+                    break;
+                case Movement.Right:
+                    if ( (this.vision[3] is EmptyTile))
+                    {
+                        return Movement.Right;
+                    }
+                    break;
+                default:
+                    return Movement.No_movement;
+                    break;
             }
             return Movement.No_movement;
+
         }
     }
     public class Goblin : Enemy
@@ -470,31 +484,40 @@ namespace The_Hero_Game
 
 
         }
-        public override Movement returnMove(Movement move = Movement.No_movement)
+        public override Movement returnMove(Movement move )
         {
-            int RandomTileIndex = r.Next(0, vision.Count + 1);
-
-            while (vision[RandomTileIndex].typeofTile.Equals(typeof(EmptyTile)))
+            switch (move)
             {
-                RandomTileIndex = r.Next(0, vision.Count);
-            }
-            if (vision[RandomTileIndex].getX() > X)
-            {
-                return Movement.Right;
-            }
-            else if (vision[RandomTileIndex].getX() < X)
-            {
-                return Movement.Left;
-            }
-            else if (vision[RandomTileIndex].getY() > Y)
-            {
-                return Movement.Down;
-            }
-            else if (vision[RandomTileIndex].getY() < Y)
-            {
-                return Movement.up;
+                case Movement.up:
+                    if ( (this.vision[0] is EmptyTile))
+                    {
+                        return Movement.up;
+                    }
+                    break;
+                case Movement.Down:
+                    if ( (this.vision[1] is EmptyTile))
+                    {
+                        return Movement.Down;
+                    }
+                    break;
+                case Movement.Left:
+                    if ( (this.vision[2] is EmptyTile))
+                    {
+                        return Movement.Left;
+                    }
+                    break;
+                case Movement.Right:
+                    if ( (this.vision[3] is EmptyTile))
+                    {
+                        return Movement.Right;
+                    }
+                    break;
+                default:
+                    return Movement.No_movement;
+                    break;
             }
             return Movement.No_movement;
+
         }
     }
     public class Mage : Enemy
@@ -704,15 +727,56 @@ namespace The_Hero_Game
         {
 
         }
-        public Map(int min_height, int max_height, int min_width, int max_width, int numenemies, int gold_amount)
+        public Map(int min_height, int max_height, int min_width, int max_width, int numenemies, int gold_amount, int weaponNum)
         {
             mapHeight = randomize(min_height, max_height);
             mapWidth = randomize(min_width, max_width);
             Gmap = new Tile[mapWidth, mapHeight];
             //fillEmpty();
             Mapcreate(numenemies);
+            for (int x = 0; x <gold_amount; x++)
+            {
+                Create(Tile.Tiletype.Gold, 0, 0);
+            }
+            for (int x = 0; x < weaponNum; x++ )
+            {
+                Create(Tile.Tiletype.Weapon, 0, 0);
+            }
+            
             updateVision();
             
+        }
+        public void moveEnemy()
+        {
+            foreach (Enemy E in Enemies)
+            {
+                Character.Movement move;
+                int randomMove = randomize(0, 4);
+                switch (randomMove)
+                {
+                    case 0:
+                        move = Character.Movement.up;
+                        break;
+                    case 1:
+                        move = Character.Movement.Down;
+                        break;
+                    case 2:
+                        move = Character.Movement.Left;
+                        break;
+                    case 3:
+                        move = Character.Movement.Right;
+                        break;
+                    default:
+                        move = Character.Movement.No_movement;
+                        break;
+
+                }
+                int x = E.getX();
+                int y = E.getY();
+                E.move(E.returnMove(move));
+                GMAP[E.getX(), E.getY()] = E;
+                GMAP[x, y] = new EmptyTile(x, y);
+            }
         }
         public int randomize(int min, int max)
         {
@@ -876,8 +940,48 @@ namespace The_Hero_Game
                     }
                     break;
                 case Character.Tiletype.Gold:
-                    Gold newGold = new Gold(X, Y);
-                    Gmap[X, Y] = newGold;
+                    int GoldX = obj.Next(0, mapWidth);
+                    int GoldY = obj.Next(0, mapHeight);
+
+                    while (Gmap[GoldX, GoldY].typeofTile != Character.Tiletype.Empty)
+                    {
+                        GoldX = obj.Next(0, mapWidth);
+                        GoldY = obj.Next(0, mapHeight);
+                    }
+                    Gold newGold = new Gold(GoldX, GoldY);
+                    Gmap[GoldX, GoldY] = newGold;
+                    Items.Add(newGold);
+                    break;
+                case Character.Tiletype.Weapon:
+                    int random = obj.Next(4);
+                    int WeaponX = obj.Next(0, mapWidth);
+                    int WeaponY = obj.Next(0, mapHeight);
+
+                    while (Gmap[WeaponX, WeaponY].typeofTile != Character.Tiletype.Empty)
+                    {
+                        WeaponX = obj.Next(0, mapWidth);
+                        WeaponY = obj.Next(0, mapHeight);
+                    }
+                    switch (random)
+                    {
+                        case 0:
+                            Gmap[WeaponX, WeaponY] = new MeleeWeapon(WeaponX, WeaponY, MeleeWeapon.Types.dagger);
+
+                            break;
+                        case 1:
+                            Gmap[WeaponX, WeaponY] = new MeleeWeapon(WeaponX, WeaponY, MeleeWeapon.Types.longsword);
+                            break;
+                        case 2:
+                            Gmap[WeaponX, WeaponY] = new RangedWeapon(WeaponX, WeaponY, RangedWeapon.Types.Rifle);
+                            break;
+                        case 3:
+                            Gmap[WeaponX, WeaponY] = new RangedWeapon(WeaponX, WeaponY, RangedWeapon.Types.Longbow);
+                            break;
+                        default:
+                            Gmap[WeaponX, WeaponY] = new EmptyTile(WeaponX, WeaponY);
+                            break;
+
+                    }
                     break;
             }
 
@@ -961,6 +1065,22 @@ namespace The_Hero_Game
         public Label MapLabel = new Label();
         private Map map;
 
+        public override string ToString()
+        {
+            string display = "";
+            for (int x = 0; x < map.mapHeight; x++)
+            {
+                for (int y = 0; y < map.mapWidth; y++)
+                {
+                    if (map.getItemAtPosition(x,y) is Gold)
+                    {
+                        display = "€";
+                    }
+
+                }
+            }
+            return display;
+        }
 
         public Map MAP
         {
@@ -970,7 +1090,7 @@ namespace The_Hero_Game
 
         public GameEngine()
         {
-            map = new Map(10, 20, 10, 20, 5, 5);
+            map = new Map(10, 20, 10, 20, 5, 5,3);
 
         }
         public void Showmap()
@@ -996,15 +1116,18 @@ namespace The_Hero_Game
                 {
                     map.PLAYERHERO.Pickup(i);
                 }
-                map.GMAP[map.PLAYERHERO.getX(), map.PLAYERHERO.getY()] = H;
+                map.GMAP[map.PLAYERHERO.getX(), map.PLAYERHERO.getY()] = map.PLAYERHERO;
                 map.GMAP[x, y] = new EmptyTile(x, y);
 
+                map.moveEnemy();
                 map.updateVision();
 
-
+                
 
                 return true;
+
             }
+
 
             return false;
         }
