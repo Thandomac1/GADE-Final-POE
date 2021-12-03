@@ -67,7 +67,7 @@ namespace The_Hero_Game
             
             gameengine.MovePlayer(Character.Movement.Down);
             gameengine.Showmap();
-            mapLabel.Text = gameengine.MAP.ToString();
+            //mapLabel.Text = gameengine.MAP.ToString();
         }
 
 
@@ -197,16 +197,16 @@ namespace The_Hero_Game
             longsword,
         }
         
-        public MeleeWeapon(int x, int y, string weapon) : base(x, y)
+        public MeleeWeapon(int x, int y, Types meleeWeapons) : base(x, y)
         {
-            switch (weapon)
+            switch (meleeWeapons)
             {
-                case "dagger":
+                case Types.dagger:
                     this.durability = 10;
                     this.wdamage = 3;
                     this.cost = 3;
                     break;
-                case "Longsword":
+                case Types.longsword:
                     this.durability = 6;
                     this.wdamage = 4;
                     this.cost = 5;
@@ -234,17 +234,17 @@ namespace The_Hero_Game
             Longbow,
         }
        
-        public RangedWeapon(int x, int y, string weapon) : base(x, y)
+        public RangedWeapon(int x, int y, Types rangeWeapon) : base(x, y)
         {
-            switch (weapon)
+            switch (rangeWeapon)
             {
-                case "Rifle":
+                case Types.Rifle:
                     this.durability = 3;
                     this.range = 3;
                     this.wdamage = 5;
                     this.cost = 7;
                     break;
-                case "Longbow":
+                case Types.Longbow:
                     this.durability = 4;
                     this.range = 2;
                     this.wdamage = 4;
@@ -364,13 +364,13 @@ namespace The_Hero_Game
             switch (Move)
             {
                 case Movement.up:
-                    Y--;
+                    X--;
                     break;
                 case Movement.Down:
-                    Y++;
+                    X++;
                     break;
                 case Movement.Left:
-                    X--;
+                    Y--;
                     break;
                 case Movement.Right:
                     Y++;
@@ -590,7 +590,7 @@ namespace The_Hero_Game
                 case Movement.Right:
                     foreach (Tile T in vision)
                     {
-                        if (T.getX() == X + 1)
+                        if (T.getY() == Y + 1)
                         {
                             if (T.typeofTile == Tiletype.Empty)
                             {
@@ -603,7 +603,7 @@ namespace The_Hero_Game
                 case Movement.Left:
                     foreach (Tile T in vision)
                     {
-                        if (T.getX() == X - 1)
+                        if (T.getY() == Y - 1)
                         {
                             if (T.typeofTile == Tiletype.Empty)
                             {
@@ -717,7 +717,11 @@ namespace The_Hero_Game
             {
                 for (int j = mapHeight; j < mapHeight; j++)
                 {
-                    Gmap[i, j] = new EmptyTile(i, j);
+                    
+                    if (Gmap[i,j] == null)
+                    {
+                        Gmap[i, j] = new EmptyTile(i, j);
+                    }
                 }
             }
         }
@@ -725,11 +729,11 @@ namespace The_Hero_Game
         {
             string mapstring = "";
 
-            for (int y = 0; y < mapHeight; y++)
+            for (int y = 0; y < mapWidth; y++)
             {
-                for (int x = 0; x < mapWidth; x++)
+                for (int x = 0; x < mapHeight; x++)
                 {
-                    mapstring += Gmap[x, y].Symbol;
+                    mapstring += Gmap[y, x].Symbol;
                 }
                 mapstring += "\n";
 
@@ -770,11 +774,11 @@ namespace The_Hero_Game
             {
                 Playerhero.vision.Add(Gmap[Playerhero.getX() + 1, Playerhero.getY()]);
             }
-            if (Playerhero.getX() > 0)
+            if (Playerhero.getY() > 0)
             {
                 Playerhero.vision.Add(Gmap[Playerhero.getX(), Playerhero.getY() - 1]);
             }
-            if (Playerhero.getX() < mapWidth)
+            if (Playerhero.getY() < mapWidth)
             {
                 Playerhero.vision.Add(Gmap[Playerhero.getX(), Playerhero.getY() + 1]);
             }
@@ -940,14 +944,7 @@ namespace The_Hero_Game
         public void Showmap()
         {
 
-            for (int y = 0; y < map.MAPWIDTH; y++)
-            {
-                for (int x = 0; x < map.MAPHEIGHT; x++)
-                {
-                    MapLabel.Text = MapLabel.Text + map.GMAP[y, x].Symbol;
-                }
-                MapLabel.Text += "\n";
-            }
+            MapLabel.Text = map.ToString();
 
         }
 
@@ -958,16 +955,17 @@ namespace The_Hero_Game
             Item i;
             if (map.PLAYERHERO.returnMove(direction) == direction)
             {
-                H = map.PLAYERHERO;
+               
                 x = map.PLAYERHERO.getX();
                 y = map.PLAYERHERO.getY();
                 map.PLAYERHERO.move(direction);
+                H = map.PLAYERHERO;
                 i = map.getItemAtPosition(map.PLAYERHERO.getX(), map.PLAYERHERO.getX());
                 if (i is Gold)
                 {
                     map.PLAYERHERO.Pickup(i);
                 }
-                map.GMAP[map.PLAYERHERO.getY(), map.PLAYERHERO.getX()] = H;
+                map.GMAP[map.PLAYERHERO.getX(), map.PLAYERHERO.getY()] = H;
                 map.GMAP[x, y] = new EmptyTile(x, y);
 
                 map.updateVision();
