@@ -296,11 +296,11 @@ namespace The_Hero_Game
         }
         private Random goldObj = new Random();
 
-        public Gold(int x, int y) : base(x, y, "O")
+        public Gold(int x, int y) : base(x, y, "€")
         {
             this.X = x;
             this.Y = y;
-            this.Symbol = "O";
+            this.Symbol = "€";
             goldAmount = goldObj.Next(1, 5);
         }
     }
@@ -352,7 +352,7 @@ namespace The_Hero_Game
         public void Pickup(Item i)
         {
             Gold number;
-            Weapon Number;
+            
             if (i is Gold)
             {
                 number = (Gold)i;
