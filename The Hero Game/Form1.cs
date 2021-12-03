@@ -66,7 +66,7 @@ namespace The_Hero_Game
             
             gameengine.MovePlayer(Character.Movement.Down);
             gameengine.Showmap();
-            mapLabel.Text = gameengine.MAP.ToString();
+            //mapLabel.Text = gameengine.MAP.ToString();
         }
 
 
@@ -196,9 +196,9 @@ namespace The_Hero_Game
             longsword,
         }
         
-        public MeleeWeapon(int x, int y, Types meleeWeapon) : base(x, y)
+        public MeleeWeapon(int x, int y, string weapon) : base(x, y)
         {
-            switch (meleeWeapon)
+            switch (weapon)
             {
                 case Types.dagger:
                     this.durability = 10;
@@ -991,8 +991,7 @@ namespace The_Hero_Game
                 x = map.PLAYERHERO.getX();
                 y = map.PLAYERHERO.getY();
                 map.PLAYERHERO.move(direction);
-                H = map.PLAYERHERO;
-                i = map.getItemAtPosition(map.PLAYERHERO.getX(), map.PLAYERHERO.getY());
+                i = map.getItemAtPosition(map.PLAYERHERO.getX(), map.PLAYERHERO.getX());
                 if (i is Gold)
                 {
                     map.PLAYERHERO.Pickup(i);
