@@ -277,6 +277,10 @@ namespace The_Hero_Game
                     break;
             }
         }
+        public override int RANGE()
+        {
+            return this.range;
+        }
     }
    
 
@@ -319,11 +323,11 @@ namespace The_Hero_Game
         protected int Hp;
         protected int max_Hp;
         protected int Damage;
-        protected int Goldpurse;
-        public int getGoldpurse
+        protected int Goldpurse = 0;
+        protected Weapon currentweapon;
+        public int getGoldpurse()
         {
-            get { return Goldpurse; }
-            set { Goldpurse = value; }
+            return Goldpurse;
         }
         protected Weapon weapons;
         public Weapon WEAPONS
@@ -352,13 +356,22 @@ namespace The_Hero_Game
         public void Pickup(Item i)
         {
             Gold number;
-            
             if (i is Gold)
             {
                 number = (Gold)i;
-                Goldpurse = Goldpurse + number.getGold();
+                this.Goldpurse = this.Goldpurse + number.getGold();
+            }
+
+            if (i is Weapon)
+            {
+                MessageBox.Show("Hello");
+                 currentweapon = (Weapon)i;
             }
             
+        }
+        public void Equip(Weapon w)
+        {
+
         }
         public string getSymbol()
         {
@@ -421,6 +434,10 @@ namespace The_Hero_Game
         {
             this.Hp -= dmg;
         }
+        public void useGold(int cost) // To spend the Gold in shop
+        {
+            this.Goldpurse -= cost;
+        }
         public abstract override string ToString();
         //public abstract movementEnum();
     }
@@ -450,6 +467,7 @@ namespace The_Hero_Game
     {
         public int[] leaderpos_x = new int[2];
         public int[] leaderpos_y = new int[2];
+
         private Map map;
         public Map MAP
         {
@@ -465,14 +483,15 @@ namespace The_Hero_Game
         }
         public Leader(int x, int y) : base(x, y, 2, 20, 20, "L")
         {
-
+            this.currentweapon = new MeleeWeapon(x, Y, MeleeWeapon.Types.longsword);
+            this.Goldpurse = 2;
         }
         public override Movement returnMove(Movement move)
         {
             switch (move)
             {
                 case Movement.up:
-                    if ( (this.vision[0] is EmptyTile))
+                    if ((this.vision[0] is EmptyTile))
                     {
                         return Movement.up;
                     }
@@ -484,13 +503,13 @@ namespace The_Hero_Game
                     }
                     break;
                 case Movement.Left:
-                    if ( (this.vision[2] is EmptyTile))
+                    if ((this.vision[2] is EmptyTile))
                     {
                         return Movement.Left;
                     }
                     break;
                 case Movement.Right:
-                    if ( (this.vision[3] is EmptyTile))
+                    if ((this.vision[3] is EmptyTile))
                     {
                         return Movement.Right;
                     }
@@ -507,11 +526,13 @@ namespace The_Hero_Game
     {
         public Goblin(int x, int y) : base(x, y, 1, 10, 10, "G")
         {
-
-
+            
+            this.currentweapon = new MeleeWeapon(x, Y, MeleeWeapon.Types.dagger);
+            this.Goldpurse = 1;
         }
-        public override Movement returnMove(Movement move )
+        public override Movement returnMove(Movement move ) // Goblin movement working from Task 1
         {
+            
             switch (move)
             {
                 case Movement.up:
@@ -550,7 +571,7 @@ namespace The_Hero_Game
     {
         public Mage(int x, int y) : base(x, y, 5, 5, 5, "M")
         {
-
+            this.Goldpurse = 3;
         }
 
         public override Movement returnMove(Movement move)
@@ -586,7 +607,7 @@ namespace The_Hero_Game
 
         }
 
-        public override Movement returnMove(Movement move = Movement.No_movement)
+        public override Movement returnMove(Movement move = Movement.No_movement) // Character is finally moving on runtime
         {
             switch (move)
             {
@@ -632,12 +653,19 @@ namespace The_Hero_Game
         }
         public override string ToString()
         {
-            string info = "Player Stats:" + "\n";
-            info += "Hp:" + Hp + "/" + max_Hp + "\n";
-            info += "Damage:" + Damage + "\n";
-            info += "[" + X.ToString() + "," + Y.ToString() + "] \n";
-            info += "Gold amount:" + Goldpurse; //Task 2 Question 3.2
-            return info;
+            string Weapon;
+            if (currentweapon == null)
+            {
+                string info = "Player Stats:" + "\n";
+                info += "Hp:" + Hp + "/" + max_Hp + "\n";
+                info += "Current Weapon: Bare hands" + "\n";
+                info += "Damage:" + Damage + "\n";
+                info += "[" + X.ToString() + "," + Y.ToString() + "] \n";
+                info += "Gold amount:" + getGoldpurse(); //Task 2 Question 3.2
+                return info;
+            }
+            Weapon = currentweapon.ToString();
+            return ("Player Stats:" + "\n" + "Hp:" + Hp + "/" + max_Hp + "\n" + "Current Weapon:" + Weapon + "\n" + "Weapon Range:"+this.currentweapon.RANGE() + "\nDamage:" + Damage + "\n" + "[" + X.ToString() + "," + Y.ToString() + "] \n" + "Gold amount:" + getGoldpurse()); ;
         }
         bool CheckforValidMove(Movement move)
         {
@@ -705,10 +733,7 @@ namespace The_Hero_Game
             Target.damage(this.Damage);
         }
 
-        internal bool getGoldpurse()
-        {
-            throw new NotImplementedException();
-        }
+       
     }
     public class Map
     {
@@ -783,6 +808,7 @@ namespace The_Hero_Game
         {
             foreach (Enemy E in Enemies)
             {
+                updateVision();
                 Character.Movement move;
                 int randomMove = randomize(0, 4);
                 switch (randomMove)
@@ -804,11 +830,17 @@ namespace The_Hero_Game
                         break;
 
                 }
+
                 int x = E.getX();
                 int y = E.getY();
                 E.move(E.returnMove(move));
-                GMAP[E.getX(), E.getY()] = E;
-                GMAP[x, y] = new EmptyTile(x, y);
+                
+                if (!((x == E.getX()) && (y == E.getY())))
+                {
+                    GMAP[E.getX(), E.getY()] = E;
+                    GMAP[x, y] = new EmptyTile(x, y);
+                }
+                
             }
         }
         public int randomize(int min, int max)
@@ -849,48 +881,15 @@ namespace The_Hero_Game
             return mapstring;
         }
 
-        public void updateVision()
+        public void updateVision() // updateVisision working perfectly from Task 1
         {
             foreach (Enemy E in Enemies)
             {
                 E.vision.Clear();
-
-                if (E.getX() > 0)
-                {
-                    E.vision.Add(Gmap[E.getX() - 1, E.getY()]);
-                }
-                if (E.getX() < mapHeight)
-                {
-                    E.vision.Add(Gmap[E.getX() + 1, E.getY()]);
-                }
-                if (E.getY() > 0)
-                {
-                    E.vision.Add(Gmap[E.getX(), E.getY()-1]);
-                }
-                if (E.getY() < mapWidth)
-                {
-                    E.vision.Add(Gmap[E.getX(), E.getY()+1]);
-                }
+                E.setVision(GMAP);            
             }
             Playerhero.vision.Clear();
-
-            if (Playerhero.getX() > 0)
-            {
-                Playerhero.vision.Add(Gmap[Playerhero.getX() - 1, Playerhero.getY()]);
-            }
-            if (Playerhero.getX() < mapHeight)
-            {
-                Playerhero.vision.Add(Gmap[Playerhero.getX() + 1, Playerhero.getY()]);
-            }
-            if (Playerhero.getY() > 0)
-            {
-                Playerhero.vision.Add(Gmap[Playerhero.getX(), Playerhero.getY() - 1]);
-            }
-            if (Playerhero.getY() < mapWidth)
-            {
-                Playerhero.vision.Add(Gmap[Playerhero.getX(), Playerhero.getY() + 1]);
-            }
-            
+            Playerhero.setVision(GMAP); 
         }
 
         public void Mapcreate(int numenemies)
@@ -1000,16 +999,19 @@ namespace The_Hero_Game
                     {
                         case 0:
                             Gmap[WeaponX, WeaponY] = new MeleeWeapon(WeaponX, WeaponY, MeleeWeapon.Types.dagger);
-
+                            Items.Add((Weapon)Gmap[WeaponX, WeaponY]);
                             break;
                         case 1:
                             Gmap[WeaponX, WeaponY] = new MeleeWeapon(WeaponX, WeaponY, MeleeWeapon.Types.longsword);
+                            Items.Add((Weapon)Gmap[WeaponX, WeaponY]);
                             break;
                         case 2:
                             Gmap[WeaponX, WeaponY] = new RangedWeapon(WeaponX, WeaponY, RangedWeapon.Types.Rifle);
+                            Items.Add((Weapon)Gmap[WeaponX, WeaponY]);
                             break;
                         case 3:
                             Gmap[WeaponX, WeaponY] = new RangedWeapon(WeaponX, WeaponY, RangedWeapon.Types.Longbow);
+                            Items.Add((Weapon)Gmap[WeaponX, WeaponY]);
                             break;
                         default:
                             Gmap[WeaponX, WeaponY] = new EmptyTile(WeaponX, WeaponY);
@@ -1052,6 +1054,11 @@ namespace The_Hero_Game
         private Weapon[] weapons = new Weapon[3];
 
         private Hero Buyer;
+        int Cost;
+        public int getCost()
+        {
+            return Cost;
+        }
 
         public Shop(Character buyer)
         {
@@ -1081,16 +1088,26 @@ namespace The_Hero_Game
             }
 
         }
-        //public bool CanBuy(int price)
+        public bool CanBuy(int price)
+        {
+            if (Buyer.getGoldpurse() >= price)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        public void Buy(int num)
+        {
+            Buyer.useGold(weapons[num].COST);
+            Buyer.Pickup(weapons[num]);
+            weapons[num] = RandomWeapon();
+        }
+        //public string DisplayWeapon(int num)
         //{
-        //    if (Buyer.getGoldpurse() >= price)
-        //    {
-        //        return true;
-        //    }
-        //    else
-        //    {
-        //        return false;
-        //    }
+            
         //}
     }
     [Serializable]
@@ -1145,8 +1162,8 @@ namespace The_Hero_Game
                 x = map.PLAYERHERO.getX();
                 y = map.PLAYERHERO.getY();
                 map.PLAYERHERO.move(direction);
-                i = map.getItemAtPosition(map.PLAYERHERO.getX(), map.PLAYERHERO.getX());
-                if (i is Gold)
+                i = map.getItemAtPosition(map.PLAYERHERO.getX(), map.PLAYERHERO.getY());
+                if (i is Item)
                 {
                     map.PLAYERHERO.Pickup(i);
                 }
@@ -1155,6 +1172,7 @@ namespace The_Hero_Game
 
                 map.moveEnemy();
                 map.updateVision();
+                
 
                 
 
@@ -1165,6 +1183,22 @@ namespace The_Hero_Game
 
             return false;
         }
+        //public void enemiesAttack()
+        //{
+        //    Enemy Enemyattacker;
+        //    for (int x = 0; x < map.Enemies.Count; x++)
+        //    {
+        //        Enemyattacker = map.Enemies[x];
+        //        for (int j = 0; j < map.getVisionSize(); j++)
+        //        {
+        //            if (Enemyattacker.)
+        //            {
+
+        //            }
+        //        }
+                
+        //    }
+        //}
 
         public class SaveandLoad
         {
