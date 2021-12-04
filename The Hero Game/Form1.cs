@@ -42,7 +42,7 @@ namespace The_Hero_Game
         }
         
 
-        private void button4_Click(object sender, EventArgs e)
+        private void LeftButton(object sender, EventArgs e)
         {
             gameengine.MovePlayer(Character.Movement.Left);
             gameengine.Showmap();
@@ -50,7 +50,7 @@ namespace The_Hero_Game
             updateForm();
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void Upbutton(object sender, EventArgs e)
         {
             gameengine.MovePlayer(Character.Movement.up);
             gameengine.Showmap();
@@ -58,7 +58,7 @@ namespace The_Hero_Game
             updateForm();
         }
 
-        private void button5_Click(object sender, EventArgs e)
+        private void RightButton(object sender, EventArgs e)
         {
             gameengine.MovePlayer(Character.Movement.Right);
             gameengine.Showmap();
@@ -67,7 +67,7 @@ namespace The_Hero_Game
 
         }
 
-        private void button1_Click_1(object sender, EventArgs e)
+        private void DownButton(object sender, EventArgs e)
         {
             
             gameengine.MovePlayer(Character.Movement.Down);
@@ -226,7 +226,7 @@ namespace The_Hero_Game
                     this.durability = 10;
                     this.wdamage = 3;
                     this.cost = 3;
-                    this.Symbol = "D";
+                    this.Symbol = "D";                
                     break;
                 case Types.longsword:
                     this.durability = 6;
@@ -364,7 +364,6 @@ namespace The_Hero_Game
 
             if (i is Weapon)
             {
-                MessageBox.Show("Hello");
                  currentweapon = (Weapon)i;
             }
             

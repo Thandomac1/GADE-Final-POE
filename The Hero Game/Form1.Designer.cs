@@ -29,7 +29,7 @@ namespace The_Hero_Game
         /// </summary>
         private void InitializeComponent()
         {
-            this.button1 = new System.Windows.Forms.Button();
+            this.Down = new System.Windows.Forms.Button();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
@@ -37,22 +37,22 @@ namespace The_Hero_Game
             this.richTextBox3 = new System.Windows.Forms.RichTextBox();
             this.Attack = new System.Windows.Forms.Button();
             this.richTextBox2 = new System.Windows.Forms.RichTextBox();
-            this.button3 = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
-            this.button5 = new System.Windows.Forms.Button();
+            this.Up = new System.Windows.Forms.Button();
+            this.Left = new System.Windows.Forms.Button();
+            this.Right = new System.Windows.Forms.Button();
             this.mapLabel = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // button1
+            // Down
             // 
-            this.button1.Location = new System.Drawing.Point(591, 418);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(83, 31);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click_1);
+            this.Down.Location = new System.Drawing.Point(606, 454);
+            this.Down.Name = "Down";
+            this.Down.Size = new System.Drawing.Size(83, 31);
+            this.Down.TabIndex = 0;
+            this.Down.Text = "Down";
+            this.Down.UseVisualStyleBackColor = true;
+            this.Down.Click += new System.EventHandler(this.DownButton);
             // 
             // richTextBox1
             // 
@@ -73,7 +73,7 @@ namespace The_Hero_Game
             this.panel1.Controls.Add(this.richTextBox2);
             this.panel1.Location = new System.Drawing.Point(492, 91);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(305, 274);
+            this.panel1.Size = new System.Drawing.Size(305, 299);
             this.panel1.TabIndex = 2;
             this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
@@ -120,35 +120,35 @@ namespace The_Hero_Game
             this.richTextBox2.TabIndex = 3;
             this.richTextBox2.Text = "";
             // 
-            // button3
+            // Up
             // 
-            this.button3.Location = new System.Drawing.Point(591, 371);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(83, 31);
-            this.button3.TabIndex = 3;
-            this.button3.Text = "button3";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
+            this.Up.Location = new System.Drawing.Point(606, 396);
+            this.Up.Name = "Up";
+            this.Up.Size = new System.Drawing.Size(83, 31);
+            this.Up.TabIndex = 3;
+            this.Up.Text = "Up";
+            this.Up.UseVisualStyleBackColor = true;
+            this.Up.Click += new System.EventHandler(this.Upbutton);
             // 
-            // button4
+            // Left
             // 
-            this.button4.Location = new System.Drawing.Point(492, 394);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(83, 31);
-            this.button4.TabIndex = 4;
-            this.button4.Text = "button4";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
+            this.Left.Location = new System.Drawing.Point(492, 418);
+            this.Left.Name = "Left";
+            this.Left.Size = new System.Drawing.Size(83, 31);
+            this.Left.TabIndex = 4;
+            this.Left.Text = "Left";
+            this.Left.UseVisualStyleBackColor = true;
+            this.Left.Click += new System.EventHandler(this.LeftButton);
             // 
-            // button5
+            // Right
             // 
-            this.button5.Location = new System.Drawing.Point(689, 394);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(83, 31);
-            this.button5.TabIndex = 5;
-            this.button5.Text = "button5";
-            this.button5.UseVisualStyleBackColor = true;
-            this.button5.Click += new System.EventHandler(this.button5_Click);
+            this.Right.Location = new System.Drawing.Point(714, 418);
+            this.Right.Name = "Right";
+            this.Right.Size = new System.Drawing.Size(83, 31);
+            this.Right.TabIndex = 5;
+            this.Right.Text = "Right";
+            this.Right.UseVisualStyleBackColor = true;
+            this.Right.Click += new System.EventHandler(this.RightButton);
             // 
             // mapLabel
             // 
@@ -163,12 +163,12 @@ namespace The_Hero_Game
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(832, 497);
             this.Controls.Add(this.mapLabel);
-            this.Controls.Add(this.button5);
-            this.Controls.Add(this.button4);
-            this.Controls.Add(this.button3);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.Right);
+            this.Controls.Add(this.Left);
+            this.Controls.Add(this.Up);
+            this.Controls.Add(this.Down);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.richTextBox1);
             this.Name = "Form1";
@@ -182,7 +182,7 @@ namespace The_Hero_Game
 
         #endregion
 
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button Down;
         private System.Windows.Forms.RichTextBox richTextBox1;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label label1;
@@ -190,9 +190,9 @@ namespace The_Hero_Game
         private System.Windows.Forms.RichTextBox richTextBox3;
         private System.Windows.Forms.Button Attack;
         private System.Windows.Forms.RichTextBox richTextBox2;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button button4;
-        private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.Button Up;
+        private System.Windows.Forms.Button Left;
+        private System.Windows.Forms.Button Right;
         public System.Windows.Forms.Label mapLabel;
     }
 }
