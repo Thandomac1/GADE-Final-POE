@@ -41,7 +41,16 @@ namespace The_Hero_Game
             this.Left = new System.Windows.Forms.Button();
             this.Right = new System.Windows.Forms.Button();
             this.mapLabel = new System.Windows.Forms.Label();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.rbnWeapon1 = new System.Windows.Forms.RadioButton();
+            this.rbnWeapon2 = new System.Windows.Forms.RadioButton();
+            this.rbnWeapon3 = new System.Windows.Forms.RadioButton();
+            this.btnBuy = new System.Windows.Forms.Button();
+            this.Shop = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
+            this.panel2.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // Down
@@ -159,22 +168,104 @@ namespace The_Hero_Game
             this.mapLabel.Size = new System.Drawing.Size(0, 15);
             this.mapLabel.TabIndex = 6;
             // 
+            // panel2
+            // 
+            this.panel2.BackColor = System.Drawing.Color.DarkOrchid;
+            this.panel2.Controls.Add(this.groupBox1);
+            this.panel2.Controls.Add(this.btnBuy);
+            this.panel2.Controls.Add(this.Shop);
+            this.panel2.Location = new System.Drawing.Point(803, 12);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(301, 150);
+            this.panel2.TabIndex = 2;
+            this.panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.rbnWeapon1);
+            this.groupBox1.Controls.Add(this.rbnWeapon2);
+            this.groupBox1.Controls.Add(this.rbnWeapon3);
+            this.groupBox1.Location = new System.Drawing.Point(9, 33);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(143, 109);
+            this.groupBox1.TabIndex = 7;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "groupBox1";
+            // 
+            // rbnWeapon1
+            // 
+            this.rbnWeapon1.AutoSize = true;
+            this.rbnWeapon1.Location = new System.Drawing.Point(6, 22);
+            this.rbnWeapon1.Name = "rbnWeapon1";
+            this.rbnWeapon1.Size = new System.Drawing.Size(94, 19);
+            this.rbnWeapon1.TabIndex = 6;
+            this.rbnWeapon1.TabStop = true;
+            this.rbnWeapon1.Text = "radioButton1";
+            this.rbnWeapon1.UseVisualStyleBackColor = true;
+            this.rbnWeapon1.CheckedChanged += new System.EventHandler(this.rbnWeapon1_CheckedChanged);
+            // 
+            // rbnWeapon2
+            // 
+            this.rbnWeapon2.AutoSize = true;
+            this.rbnWeapon2.Location = new System.Drawing.Point(6, 47);
+            this.rbnWeapon2.Name = "rbnWeapon2";
+            this.rbnWeapon2.Size = new System.Drawing.Size(94, 19);
+            this.rbnWeapon2.TabIndex = 6;
+            this.rbnWeapon2.TabStop = true;
+            this.rbnWeapon2.Text = "radioButton1";
+            this.rbnWeapon2.UseVisualStyleBackColor = true;
+            // 
+            // rbnWeapon3
+            // 
+            this.rbnWeapon3.AutoSize = true;
+            this.rbnWeapon3.Location = new System.Drawing.Point(6, 70);
+            this.rbnWeapon3.Name = "rbnWeapon3";
+            this.rbnWeapon3.Size = new System.Drawing.Size(94, 19);
+            this.rbnWeapon3.TabIndex = 6;
+            this.rbnWeapon3.TabStop = true;
+            this.rbnWeapon3.Text = "radioButton1";
+            this.rbnWeapon3.UseVisualStyleBackColor = true;
+            // 
+            // btnBuy
+            // 
+            this.btnBuy.Location = new System.Drawing.Point(158, 37);
+            this.btnBuy.Name = "btnBuy";
+            this.btnBuy.Size = new System.Drawing.Size(101, 65);
+            this.btnBuy.TabIndex = 7;
+            this.btnBuy.Text = "Buy";
+            this.btnBuy.UseVisualStyleBackColor = true;
+            this.btnBuy.Click += new System.EventHandler(this.btnBuy_Click);
+            // 
+            // Shop
+            // 
+            this.Shop.AutoSize = true;
+            this.Shop.Location = new System.Drawing.Point(9, 8);
+            this.Shop.Name = "Shop";
+            this.Shop.Size = new System.Drawing.Size(34, 15);
+            this.Shop.TabIndex = 5;
+            this.Shop.Text = "Shop";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(832, 497);
+            this.ClientSize = new System.Drawing.Size(1106, 497);
             this.Controls.Add(this.mapLabel);
             this.Controls.Add(this.Right);
             this.Controls.Add(this.Left);
             this.Controls.Add(this.Up);
             this.Controls.Add(this.Down);
+            this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.richTextBox1);
             this.Name = "Form1";
             this.Text = "Form1";
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            this.panel2.ResumeLayout(false);
+            this.panel2.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -194,6 +285,13 @@ namespace The_Hero_Game
         private System.Windows.Forms.Button Left;
         private System.Windows.Forms.Button Right;
         public System.Windows.Forms.Label mapLabel;
+        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Button btnBuy;
+        private System.Windows.Forms.RadioButton rbnWeapon3;
+        private System.Windows.Forms.RadioButton rbnWeapon2;
+        private System.Windows.Forms.RadioButton rbnWeapon1;
+        private System.Windows.Forms.Label Shop;
+        private System.Windows.Forms.GroupBox groupBox1;
     }
 }
 

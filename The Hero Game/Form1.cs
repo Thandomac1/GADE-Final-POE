@@ -16,6 +16,7 @@ namespace The_Hero_Game
     public partial class Form1 : Form
     {
         GameEngine gameengine = new GameEngine();
+
         
         
         public Form1()
@@ -84,11 +85,45 @@ namespace The_Hero_Game
         {
 
             richTextBox1.Text = gameengine.MAP.PLAYERHERO.ToString();
+            ShopItems();
         }
 
         private void Attack_Click(object sender, EventArgs e)
         {
 
+        }
+        public void ShopItems()
+        {
+            rbnWeapon1.Text = "";
+            rbnWeapon1.Text = gameengine.shop.GetWeapon(0).ToString();
+            rbnWeapon2.Text = "";
+            rbnWeapon2.Text = gameengine.shop.GetWeapon(1).ToString();
+            rbnWeapon3.Text = "";
+            rbnWeapon3.Text = gameengine.shop.GetWeapon(2).ToString();
+        }
+
+        private void rbnWeapon1_CheckedChanged(object sender, EventArgs e)
+        {
+            
+            {
+                //if (gameengine.shop.CanBuy(1))
+                //{
+                //    btnBuy.Enabled = true;
+                //}
+                //else
+                //{
+                //    btnBuy.Enabled = false;
+                //}
+            }
+
+            
+
+        }
+
+        private void btnBuy_Click(object sender, EventArgs e)
+        {
+            //int i = rbnWeapon1
+            //gameengine.shop.Buy();
         }
 
 
@@ -195,6 +230,11 @@ namespace The_Hero_Game
             get { return weaponType; }
             set { weaponType = value; }
         }
+        protected string weaponName;
+        public string getWeaponName()
+        {
+            return weaponName;
+        }
         public Weapon(int x, int y) : base(x, y, "W")
         {
             this.Symbol = "W";
@@ -226,19 +266,25 @@ namespace The_Hero_Game
                     this.durability = 10;
                     this.wdamage = 3;
                     this.cost = 3;
-                    this.Symbol = "D";                
+                    this.Symbol = "D";
+                    this.weaponName = "Dagger";
                     break;
                 case Types.longsword:
                     this.durability = 6;
                     this.wdamage = 4;
                     this.cost = 5;
                     this.Symbol = "S";
+                    this.weaponName = "longsword";
                     break;                   
             }
         }
         public override int RANGE()
         {
             return 1;
+        }
+        public override string ToString()
+        {
+            return weaponName;
         }
     }
     
@@ -267,6 +313,7 @@ namespace The_Hero_Game
                     this.wdamage = 5;
                     this.cost = 7;
                     this.Symbol = "R";
+                    this.weaponName = "Rifle";
                     break;
                 case Types.Longbow:
                     this.durability = 4;
@@ -274,12 +321,17 @@ namespace The_Hero_Game
                     this.wdamage = 4;
                     this.cost = 6;
                     this.Symbol = "B";
+                    this.weaponName = "Longbow";
                     break;
             }
         }
         public override int RANGE()
         {
             return this.range;
+        }
+        public override string ToString()
+        {
+            return weaponName;
         }
     }
    
@@ -1061,7 +1113,7 @@ namespace The_Hero_Game
 
         public Shop(Character buyer)
         {
-            for (int w = 0; w < 4; w++)
+            for (int w = 0; w < 3; w++)
             {
                 weapons[w] = RandomWeapon();
             }
@@ -1087,9 +1139,9 @@ namespace The_Hero_Game
             }
 
         }
-        public bool CanBuy(int price)
+        public bool CanBuy(int num)
         {
-            if (Buyer.getGoldpurse() >= price)
+            if (Buyer.getGoldpurse() >= weapons[num].COST)
             {
                 return true;
             }
@@ -1104,9 +1156,13 @@ namespace The_Hero_Game
             Buyer.Pickup(weapons[num]);
             weapons[num] = RandomWeapon();
         }
-        //public string DisplayWeapon(int num)
+        public Weapon GetWeapon(int num)
+        {
+            return weapons[num];
+        }
+        //public void string DisplayWeapon()
         //{
-            
+
         //}
     }
     [Serializable]
@@ -1114,6 +1170,7 @@ namespace The_Hero_Game
     {
         public Label MapLabel = new Label();
         private Map map;
+        public Shop shop;
 
         public override string ToString()
         {
@@ -1141,7 +1198,7 @@ namespace The_Hero_Game
         public GameEngine()
         {
             map = new Map(15, 30, 15, 30, 5, 5,3);
-
+            shop = new Shop((Character)map.GMAP[map.PLAYERHERO.getX(), map.PLAYERHERO.getY()]);
         }
         public void Showmap()
         {
